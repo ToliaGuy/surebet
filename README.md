@@ -9,14 +9,14 @@ There are several reasons of arbitrage situation appearance, here are the main o
 * Bookmakers’ mistakes that lead to false odds output.
 
 ## Build With
-[Docker](https://docs.docker.com/)
-[Docker Compose](https://docs.docker.com/compose/)
-[FastAPI](https://fastapi.tiangolo.com/)
-[Scrapy](https://scrapy.org/)
-[Prometheus](https://prometheus.io/)
-[Kafka](https://kafka.apache.org/)
-[Mongo DB](https://www.mongodb.com/)
-[Grafana](https://grafana.com/)
+* [Docker](https://docs.docker.com/)
+* [Docker Compose](https://docs.docker.com/compose/)
+* [FastAPI](https://fastapi.tiangolo.com/)
+* [Scrapy](https://scrapy.org/)
+* [Prometheus](https://prometheus.io/)
+* [Kafka](https://kafka.apache.org/)
+* [Mongo DB](https://www.mongodb.com/)
+* [Grafana](https://grafana.com/)
 
 ## Roadmap
 
