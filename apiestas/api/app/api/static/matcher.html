@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathcher</title>
+    <link rel="stylesheet" href="css/matcher.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <div class="alert-box success">Successful !!!</div>
+    <div class="alert-box failure">Error !!!</div>
+    <table id="unmatched-content"></table>
+<footer>
+    <div class="form">
+        <select name="action" id="matcher-action-type" onchange="change_action(this)">
+            <option value="new">New</option>
+            <option value="add">Add</option>
+        </select>
+        <input type="hidden" class="bookmaker-sport-input" value="">
+        <div class="tournament-id-div">
+            <input type="text" placeholder="tournament_slug_id" name="tournament-id" id="tournament-id">
+        </div>
+        <div class="competitor-id-div">
+            <input type="text" placeholder="competitor_slug_id" name="competitor-id" id="competitor-id">
+        </div>
+        <div class="bookmaker-variable-content">
+        </div>
+        <div class="submit-btn-div">
+            <button class="submit-btn" type="button" onclick="submit_competitor(this)">Submit competitor</button>
+        </div>  
+    </div>
+</footer>
+</body>
+<script src="js/matcher.js"></script>
+</html>

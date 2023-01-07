@@ -1,0 +1,9 @@
+.env
+.idea/
+.vscode/
+.venv/
+**/__pycache__/
+.DS_Store
+apiestas/build/
+**/grafana/
+**/.pytest_cache/

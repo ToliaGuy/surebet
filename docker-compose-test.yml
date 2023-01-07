@@ -1,0 +1,22 @@
+version: '3.2'
+services:
+  mongo:
+    image: "mongo:4.0-xenial"
+    ports:
+      - "27017:27017"
+  tests:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    environment:
+      - DB_CONNECTION=mongodb://mongo:27017
+      - DEBUG=true
+    depends_on:
+      - mongo
+    # when executing the entrypoint with command it runs in /usr/src/app
+    entrypoint: pytest
+    # but from that directory we are calling directory that is in the root called apiestas
+    # the reason for mounting it in there is so we do not have to rebuild the image after every change
+    volumes:
+      - ..:/apiestas
+    command: "-v /apiestas/api/tests/"

@@ -1,0 +1,41 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+typer = "*"
+uvicorn = "*"
+celery = "*"
+requests = "*"
+scrapy = "*"
+fastapi = "*"
+dateparser = "*"
+motor = "*"
+pydantic = "*"
+python-slugify = "*"
+fuzzywuzzy = "*"
+loguru = "*"
+async-exit-stack = "*"
+async-generator = "*"
+confluent-kafka = "*"
+avro-python3 = "*"
+js2xml = "*"
+redis = "*"
+flower = "*"
+selenium = "*"
+chompjs = "*"
+python-dateutil = "*"
+starlette-prometheus = "*"
+prometheus-client = "*"
+gunicorn = "*"
+
+[dev-packages]
+pylint = "*"
+pytest = "*"
+pymongo = "*"
+pytest-coverage = "*"
+requests = "*"
+
+[requires]
+python_version = "3.10"

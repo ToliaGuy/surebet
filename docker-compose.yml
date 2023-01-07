@@ -1,0 +1,145 @@
+version: '3.6'
+services:
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    ports: 
+      - "9090:9090"
+    volumes:
+        - prometheus_data:/prometheus
+        - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    restart: unless-stopped
+    networks:
+      - localnet
+    
+    
+  grafana:
+    container_name: grafana
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./apiestas/grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    restart: unless-stopped
+    networks:
+      - localnet
+    
+
+  mongo:
+    image: "mongo:4.0-xenial"
+    container_name: mongo
+    volumes:
+      - rs1:/data/db
+    networks:
+      - localnet
+    ports:
+      - "27017:27017"
+    restart: on-failure
+
+    # crawler:
+  #   container_name: crawler
+  #   build:
+  #     context: ..
+  #     dockerfile: docker/Dockerfile
+  #   environment:
+  #     - APIESTAS_API_URL=api:9000
+  #   depends_on:
+  #     - api
+  #   command: crawler --bet-type "Home/Away" --bet-type "Draw No Bet" --bet-type "Over/Under"
+  #   networks:
+  #     - localnet
+  #   volumes:
+  #     - ..:/usr/src/app
+
+  crawler:
+     container_name: crawler
+     build:
+       context: .
+       dockerfile: ./Dockerfile
+     environment:
+      - APIESTAS_API_URL=api:9000
+      - SLEEP_PAUSE=5
+      - PROMETHEUS_ENABLED=0
+      - PROMETHEUS_PORT=8001
+      # has to be folder that was created somehow previously I have given there folder, that didnt exist and it gave me an error
+      - PROMETHEUS_MULTIPROC_DIR=/usr
+     depends_on:
+       - api
+     command: crawler
+     networks:
+       - localnet
+     volumes:
+       - .:/usr/src/app
+
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      - DB_CONNECTION=mongodb://mongo:27017
+      - DEBUG=true
+      - PROMETHEUS_ENABLED=0
+      - PROMETHEUS_PORT=8001
+    ports:
+      - 9000:9000
+    depends_on:
+      - mongo
+    command: api
+    networks:
+      - localnet
+    volumes:
+    - .:/usr/src/app
+    restart: on-failure
+
+  #selenium-hub:
+   # container_name: selenium-hub
+    #image: selenium/hub
+    #ports:
+     # - 4442-4444:4442-4444
+   # tty: true
+    #environment:
+     # - GRID_MAX_SESSION=20
+      #- GRID_NEW_SESSION_WAIT_TIMEOUT=60000
+      #- GRID_BROWSER_TIMEOUT=300
+      #- GRID_TIMEOUT=300
+      #- TIMEOUT=300
+    #networks:
+     # - localnet
+    #depends_on:
+     # - node-chrome
+
+  #node-chrome:
+   # container_name: node-chrome
+    #image: selenium/node-chrome
+    #environment:
+     # - VNC_NO_PASSWORD=1  # Disable password authentication.
+      #- SE_EVENT_BUS_PUBLISH_PORT=4442
+      #- SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+      #- SE_EVENT_BUS_HOST=selenium-hub
+      #- SE_NODE_OVERRIDE_MAX_SESSIONS=1
+      #- SE_NODE_MAX_SESSIONS=3
+    #shm_size: 2GB
+    #networks:
+     # - localnet
+
+volumes:
+  rs1:
+  prometheus_data:
+  grafana_data:
+  
+networks:
+  localnet:
+    attachable: true
